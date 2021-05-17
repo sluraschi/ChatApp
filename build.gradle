@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'com.asapp.backend.challenge'
+version '1.0'
+
+apply plugin: 'application'
+apply plugin: 'jacoco'
+
+mainClassName = 'com.asapp.backend.challenge.Application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+run {
+    systemProperty "dbAddress", "/db/chatapp.db"
+    systemProperty "AuthKey", "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w"
+    systemProperty "issuer", "Chat-challenge-issuer"
+    systemProperty "salt", "hashingSalt"
+    standardInput = System.in
+}
+
+test {
+    systemProperty "AuthKey", "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w"
+    systemProperty "issuer", "Chat-challenge-issuer"
+    systemProperty "salt", "hashingSalt"
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    compile group: 'com.sparkjava', name: 'spark-core', version: '2.5'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.1'
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
+
+    compile 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.11.2',
+            'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    implementation group: 'org.sql2o', name: 'sql2o', version: '1.5.4'
+    implementation 'org.xerial:sqlite-jdbc:3.34.0'
+
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.6.3'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.1'
+
+    testImplementation 'org.mockito:mockito-inline:3.7.7'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.7.7'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.3'
+}
