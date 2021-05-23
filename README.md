@@ -13,14 +13,51 @@ It is possible to run it using gradle (but Db should be started separately with 
 ./gradlew run
 ```
 
-And also by using Docker. First it is necessary to build the image using:
+## Docker run
+First it is necessary to build the image using:
 ```
 docker build -t chat_app .
 ```
+
 Finally, run the container:
 ```
 docker run -d -p 8080:8080 -v /Users/Shared/ChatApp/dbfolder:/app/db/storage/ chat_app
 ```
+
+Now a post to the endpoint `http://localhost:8080/check` should return a 200 OK response!
+
+## Kubernetes run
+Locally, a Kubernetes server must be started. Minikube is a good alternative:
+
+```
+minikube start
+```
+
+The minikube node uses its own Docker repository that’s not connected to the Docker registry on the local machine, so without pulling, it doesn’t know where to get the image from.
+To fix this, point your shell to minikube’s docker-daemon, running:
+
+```
+eval $(minikube -p minikube docker-env)
+```
+
+One thing to note is that the command `eval $(minikube -p minikube docker-env)` has to be run in every new terminal window before you build an image. An alternative would be to put it into your .profile file.
+
+Now rebuild the image once again, so that it’s installed in the minikube registry, instead of the local one:
+
+```
+docker build -t chat_app .
+```
+
+Proceed to create the kubernetes job:
+
+```
+kubectl apply -f kubernetes.yaml
+```
+
+Finally, Services of type LoadBalancer (like the one this project is using) can be exposed via the `minikube tunnel` command. It must be run in a separate terminal window to keep it running. This is not needed when the deployment is done on a cloud platform like AWS since those can provide external IPs to the pods. 
+
+Now a post to the endpoint `http://localhost:8080/check` should return a 200 OK response!
+
 ## Local Debugging
 For local debugging it is necesary to previously create the database in SQLite. To do so from a terminal you just have to run:
 ```
