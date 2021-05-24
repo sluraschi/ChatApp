@@ -33,6 +33,16 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport{
+    dependsOn(test)
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
 }
 
 dependencies {
